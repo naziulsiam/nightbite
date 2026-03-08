@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 43 96% 56%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 22%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 22%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 25%;
+    --input: 217 33% 25%;
+    --ring: 43 96% 56%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 43 96% 56%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 22%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 25%;
+    --sidebar-ring: 43 96% 56%;
+
+    /* Custom NightBite tokens */
+    --nightbite-amber: 43 96% 56%;
+    --nightbite-amber-glow: 38 92% 50%;
+    --nightbite-emerald: 160 84% 39%;
+    --nightbite-navy: 222 47% 11%;
+    --nightbite-navy-light: 217 33% 17%;
+    --nightbite-navy-lighter: 217 33% 22%;
+    --nightbite-urgency: 0 84% 60%;
+
+    --glass-bg: 217 33% 17% / 0.6;
+    --glass-border: 217 33% 30% / 0.3;
+  }
+
+  .consumer-theme {
+    --primary: var(--nightbite-amber);
+    --primary-foreground: var(--nightbite-navy);
+    --secondary: var(--nightbite-emerald);
+    --secondary-foreground: var(--foreground);
+    --ring: var(--nightbite-amber);
+    --sidebar-primary: var(--nightbite-amber);
+  }
+
+  .partner-theme {
+    --primary: var(--nightbite-emerald);
+    --primary-foreground: var(--foreground);
+    --secondary: var(--nightbite-amber);
+    --secondary-foreground: var(--nightbite-navy);
+    --ring: var(--nightbite-emerald);
+    --sidebar-primary: var(--nightbite-emerald);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-xl border border-border/30 rounded-2xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-card-solid {
+    @apply bg-card border border-border/30 rounded-2xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .amber-gradient {
+    @apply bg-gradient-to-r from-primary to-[hsl(var(--nightbite-amber-glow))];
+  }
+
+  .amber-glow {
+    box-shadow: 0 0 20px hsl(43 96% 56% / 0.3), 0 0 60px hsl(43 96% 56% / 0.1);
+  }
+
+  .eco-badge {
+    @apply bg-secondary/20 text-secondary border border-secondary/30 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .urgency-badge {
+    @apply bg-destructive/20 text-destructive border border-destructive/30 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-amber {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(43 96% 56% / 0.4); }
+  50% { box-shadow: 0 0 0 12px hsl(43 96% 56% / 0); }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(217 33% 30%);
+  border-radius: 2px;
+}
+
+/* Hide scrollbar for horizontal scrolls */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
