@@ -10,7 +10,7 @@ interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   isInitialized: boolean;
-  
+
   // Actions
   login: (phone: string) => Promise<void>;
   verifyOtp: (phone: string, otp: string) => Promise<boolean>;
@@ -20,6 +20,7 @@ interface AuthState {
   setupRole: (role: UserRole) => Promise<void>;
   toggleActiveRole: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  initialize: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -40,12 +41,12 @@ export const useAuthStore = create<AuthState>()(
           set({ isLoading: false });
         }
       },
-      
+
       // Initialize auth from storage
       initialize: () => {
         const token = localStorage.getItem('nb_token');
         const userStr = localStorage.getItem('nb_user');
-        
+
         if (token && userStr) {
           try {
             const user = JSON.parse(userStr);
@@ -70,19 +71,19 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const { data } = await apiClient.post('/auth/otp/verify', { phone, otp });
-          
+
           const { user, token, refreshToken } = data.data;
-          
+
           localStorage.setItem('nb_token', token);
           localStorage.setItem('nb_refresh_token', refreshToken);
-          
+
           set({
             user,
             token,
             refreshToken,
             isAuthenticated: true,
           });
-          
+
           return true;
         } catch (error) {
           console.error('OTP verification failed:', error);
@@ -122,7 +123,7 @@ export const useAuthStore = create<AuthState>()(
       toggleActiveRole: async () => {
         const currentUser = get().user;
         if (!currentUser || currentUser.roles.length < 2) return;
-        
+
         const newRole = currentUser.activeRole === 'consumer' ? 'partner' : 'consumer';
         await get().setupRole(newRole);
       },

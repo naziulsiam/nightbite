@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -42,11 +42,16 @@ const NotFound = lazy(() => import('@/pages/NotFound'));
 // Initialize auth from storage on app load
 const InitAuth = ({ children }: { children: React.ReactNode }) => {
   const isLoading = useAuthStore((state) => state.isLoading);
-  
+  const initialize = useAuthStore((state) => state.initialize);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
   if (isLoading) {
     return <LoadingScreen message="Starting up..." />;
   }
-  
+
   return <>{children}</>;
 };
 
