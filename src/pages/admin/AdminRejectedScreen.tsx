@@ -3,20 +3,19 @@ import { AlertTriangle, Download, RefreshCw, Search, Trash2 } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { AdminApplication } from "@/pages/admin/AdminApplicationsScreen";
 
-const initialRejected = [
+interface RejectedApp {
+    id: string;
+    date: string;
+    restaurantName: string;
+    reason: string;
+    reapplyDate: string;
+}
+
+const initialRejected: RejectedApp[] = [
     { id: "NB-2025-0015", date: "Feb 18, 2025", restaurantName: "Unknown Cafe", reason: "Invalid FSS License", reapplyDate: "Mar 20, 2025" },
     { id: "NB-2025-0021", date: "Feb 27, 2025", restaurantName: "Fake Biryani", reason: "Business not eligible (No physical location)", reapplyDate: "May 27, 2025" },
     { id: "NB-2025-0033", date: "Mar 06, 2025", restaurantName: "Old Town Treats", reason: "Trade License mismatch", reapplyDate: "Apr 05, 2025" },
 ];
-
-const AdminRejectedScreen = () => {
-    interface RejectedApp {
-  id: string;
-  date: string;
-  restaurantName: string;
-  reason: string;
-  reapplyDate: string;
-}
 
 const AdminRejectedScreen = () => {
     const [applications, setApplications] = useState<RejectedApp[]>(initialRejected);
