@@ -1,13 +1,15 @@
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { queryClient } from '@/lib/queryClient';
-import { useAuthStore } from '@/stores/authStore';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { LoadingScreen } from '@/components/LoadingScreen';
+
+// Auth Provider - wraps both old context and new store
+import { AuthProvider } from '@/contexts/AuthContext';
 
 // Eager load critical components
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
@@ -39,30 +41,14 @@ const AdminApprovedScreen = lazy(() => import('@/pages/admin/AdminApprovedScreen
 const AdminRejectedScreen = lazy(() => import('@/pages/admin/AdminRejectedScreen'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
-// Initialize auth from storage on app load
-const InitAuth = ({ children }: { children: React.ReactNode }) => {
-  const isLoading = useAuthStore((state) => state.isLoading);
-  const initialize = useAuthStore((state) => state.initialize);
-
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
-
-  if (isLoading) {
-    return <LoadingScreen message="Starting up..." />;
-  }
-
-  return <>{children}</>;
-};
-
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <InitAuth>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
             <Suspense fallback={<LoadingScreen />}>
               <Routes>
                 {/* Public Routes */}
@@ -121,9 +107,9 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
-          </InitAuth>
-        </BrowserRouter>
-      </TooltipProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>
 );

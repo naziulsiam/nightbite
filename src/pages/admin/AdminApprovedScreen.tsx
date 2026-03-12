@@ -1,9 +1,20 @@
 import { useState, useEffect } from "react";
-import { Download, Edit2, MessageSquare, MoreVertical, Search, ShieldAlert } from "lucide-react";
+import { Download, Edit2, MessageSquare, MoreVertical, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AdminApplication } from "@/pages/admin/AdminApplicationsScreen";
 
-const initialApproved = [
+interface Partner {
+    id: string;
+    date: string;
+    restaurantName: string;
+    type: string;
+    commission: number;
+    listings: number;
+    revenue: number;
+    status: string;
+}
+
+const initialApproved: Partner[] = [
     { id: "NB-2025-0012", date: "Feb 15, 2025", restaurantName: "Star Kabab", type: "Mixed", commission: 12, listings: 45, revenue: 145000, status: "Active" },
     { id: "NB-2025-0018", date: "Feb 22, 2025", restaurantName: "Panshi Restaurant", type: "Bengali", commission: 15, listings: 12, revenue: 32000, status: "Active" },
     { id: "NB-2025-0024", date: "Mar 01, 2025", restaurantName: "Burger King", type: "Fast Food", commission: 10, listings: 85, revenue: 210000, status: "Active" },
@@ -11,7 +22,7 @@ const initialApproved = [
 ];
 
 const AdminApprovedScreen = () => {
-    const [partners, setPartners] = useState<any[]>(initialApproved);
+    const [partners, setPartners] = useState<Partner[]>(initialApproved);
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
@@ -32,8 +43,8 @@ const AdminApprovedScreen = () => {
                 }));
 
             // Merge mock data with any newly approved partners from localstorage during this session
-            const merged = [...newlyApproved, ...initialApproved].reduce((acc, current) => {
-                const x = acc.find((item: any) => item.id === current.id);
+            const merged = [...newlyApproved, ...initialApproved].reduce((acc: Partner[], current) => {
+                const x = acc.find((item) => item.id === current.id);
                 if (!x) {
                     return acc.concat([current]);
                 } else {

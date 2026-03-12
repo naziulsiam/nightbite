@@ -10,7 +10,16 @@ const initialRejected = [
 ];
 
 const AdminRejectedScreen = () => {
-    const [applications, setApplications] = useState<any[]>(initialRejected);
+    interface RejectedApp {
+  id: string;
+  date: string;
+  restaurantName: string;
+  reason: string;
+  reapplyDate: string;
+}
+
+const AdminRejectedScreen = () => {
+    const [applications, setApplications] = useState<RejectedApp[]>(initialRejected);
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
@@ -27,8 +36,8 @@ const AdminRejectedScreen = () => {
                     reapplyDate: "TBD"
                 }));
 
-            const merged = [...newlyRejected, ...initialRejected].reduce((acc, current) => {
-                const x = acc.find((item: any) => item.id === current.id);
+            const merged = [...newlyRejected, ...initialRejected].reduce((acc: RejectedApp[], current) => {
+                const x = acc.find((item) => item.id === current.id);
                 if (!x) {
                     return acc.concat([current]);
                 } else {

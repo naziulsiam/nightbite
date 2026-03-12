@@ -17,7 +17,7 @@ const AdminLayout = () => {
             const stored = localStorage.getItem("nb_admin_applications");
             if (stored) {
                 const apps = JSON.parse(stored);
-                setPendingCount(apps.filter((a: any) => a.status === "pending").length);
+                setPendingCount(apps.filter((a: { status: string }) => a.status === "pending").length);
             }
         };
         updateCount();

@@ -25,7 +25,7 @@ const RestaurantCard = ({ restaurant, index }: Props) => {
     // Simulate "Ending Soon" for specific items
     if (idNum === 2 || idNum === 4) { initialH = 0; initialM = 15; }
 
-    let now = new Date().getTime();
+    const now = new Date().getTime();
     const end = now + (initialH * 3600 + initialM * 60) * 1000 + (idNum * 1000);
 
     const interval = setInterval(() => {

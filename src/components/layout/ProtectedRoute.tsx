@@ -1,19 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth, Role } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/stores/authStore";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import type { UserRole } from "@/types";
 
 interface ProtectedRouteProps {
-    allowedRoles?: Role[];
+    allowedRoles?: UserRole[];
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-    const { user, isAuthenticated, isLoading } = useAuth();
+    const { user, isAuthenticated, isLoading, hasHydrated } = useAuthStore();
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-background flex flex-col items-center justify-center">
-                <div className="w-8 h-8 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-            </div>
-        );
+    // Wait for auth store to hydrate before making routing decisions
+    if (!hasHydrated || isLoading) {
+        return <LoadingScreen message="Loading..." />;
     }
 
     if (!isAuthenticated || !user) {
