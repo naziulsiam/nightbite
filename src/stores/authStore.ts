@@ -40,7 +40,9 @@ export const useAuthStore = create<AuthState>()(
       login: async (phone: string) => {
         set({ isLoading: true });
         try {
-          await apiClient.post('/auth/otp/send', { phone });
+          // MOCK: simulate network latency
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          // await apiClient.post('/auth/otp/send', { phone });
         } finally {
           set({ isLoading: false });
         }
@@ -49,9 +51,23 @@ export const useAuthStore = create<AuthState>()(
       verifyOtp: async (phone: string, otp: string) => {
         set({ isLoading: true });
         try {
-          const { data } = await apiClient.post('/auth/otp/verify', { phone, otp });
+          // MOCK: simulate network latency and return dummy data
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          // const { data } = await apiClient.post('/auth/otp/verify', { phone, otp });
+          // const { user, token, refreshToken } = data.data;
 
-          const { user, token, refreshToken } = data.data;
+          const user: User = {
+            id: 'mock-user-123',
+            phone: phone || '+8801234567890',
+            roles: ['consumer', 'partner'],
+            activeRole: 'consumer',
+            partnerStatus: 'none',
+            isVerified: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+          const token = 'mock-jwt-token';
+          const refreshToken = 'mock-refresh-token';
 
           set({
             user,
@@ -90,8 +106,14 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setupRole: async (role: UserRole) => {
-        const { data } = await apiClient.post('/users/role', { role });
-        set({ user: data.data });
+        // MOCK: simulate role setup
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        // const { data } = await apiClient.post('/users/role', { role });
+
+        const currentUser = get().user;
+        if (currentUser) {
+          set({ user: { ...currentUser, activeRole: role } });
+        }
       },
 
       toggleActiveRole: async () => {
