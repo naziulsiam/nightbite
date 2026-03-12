@@ -54,10 +54,20 @@ const LoginScreen = () => {
             return;
         }
         setIsProcessing(true);
-        await login(`+880${phone}`);
-        setIsProcessing(false);
-        setStep("otp");
-        setCountdown(3);
+        try {
+            await login(`+880${phone}`);
+            setIsProcessing(false);
+            setStep("otp");
+            setCountdown(3);
+        } catch (error) {
+            setIsProcessing(false);
+            const err = error as { message?: string };
+            toast({
+                title: "Failed to send OTP",
+                variant: "destructive",
+                description: err?.message || "Please check your internet connection or try again later."
+            });
+        }
     };
 
     const handleVerify = async (otpString: string) => {
